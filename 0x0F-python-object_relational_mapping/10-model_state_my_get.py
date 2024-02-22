@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 """
-script that prints the first State object from the database hbtn_0e_6_usa
+script that prints the State object with the name passed as argument
+from the database hbtn_0e_6_usa
 """
 from sys import argv
 from sqlalchemy import create_engine
+from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import sessionmaker
 from model_state import Base, State
 
@@ -13,7 +15,8 @@ if __name__ == "__main__":
     ))
     session = sessionmaker(bind=engine)
     Session = session()
-    first_state = Session.query(State).order_by(State.id).first()
-    if (first_state is None):
-        print("Nothing")
-    print("{}: {}".format(first_state.id, first_state.name))
+    try:
+        state = Session.query(State).filter(State.name == argv[4]).one()
+        print(state.id)
+    except Exception:
+        print("Not found")

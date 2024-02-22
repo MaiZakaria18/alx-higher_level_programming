@@ -1,17 +1,31 @@
 #!/usr/bin/python3
 """
-Contains the class definition of a City
+city Class for table cities
 """
-from relationship_state import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from relationship_state import Base
 
 
 class City(Base):
     """
-    Class that defines each city
+    A class representing a city in a database.
+
+    This class defines the structure of the 'cities' table in the database.
+    Each instance of this class corresponds to a row in the 'cities' table.
+
+    Attributes:
+        id (int): The unique identifier for the city. This is the primary key.
+        name (str): The name of the city.
+        state_id (int): The foreign key referencing the id of
+        the associated state.
+
+    Args:
+        Base: The declarative base class provided by SQLAlchemy.
+
     """
     __tablename__ = 'cities'
-    id = Column(Integer, unique=True, nullable=False, primary_key=True)
+    id = Column(Integer, autoincrement=True, primary_key=True)
     name = Column(String(128), nullable=False)
-    state_id = Column(Integer, ForeignKey("states.id"), nullable=False)
+    state_id = Column(Integer, ForeignKey('states.id'), nullable=False)
+    state = relationship("State", back_populates="cities")
